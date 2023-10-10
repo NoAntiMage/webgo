@@ -1,0 +1,508 @@
+definitions:
+  condition.QueryCondition:
+    properties:
+      comparison:
+        enum:
+        - eq
+        - ne
+        - gt
+        - ge
+        - lt
+        - le
+        - in
+        - like
+        type: string
+      fieldname:
+        type: string
+      operator:
+        enum:
+        - and
+        - or
+        type: string
+      value: {}
+    required:
+    - comparison
+    - fieldname
+    - operator
+    - value
+    type: object
+  types.GroupCreateReq:
+    properties:
+      name:
+        type: string
+    type: object
+  types.GroupCreateResp:
+    properties:
+      lastId:
+        type: integer
+    type: object
+  types.GroupResp:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  types.GroupSearchReq:
+    properties:
+      query:
+        description: pagination.Page
+        items:
+          $ref: '#/definitions/condition.QueryCondition'
+        type: array
+    type: object
+  types.GroupUpdateReq:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  types.GroupsInUserReq:
+    properties:
+      groupIds:
+        items:
+          type: integer
+        type: array
+      userId:
+        type: integer
+    required:
+    - groupIds
+    - userId
+    type: object
+  types.GroupsResp:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  types.ModifyRowsResp:
+    properties:
+      rowsAffected:
+        type: integer
+    type: object
+  types.UserCreateReq:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      gender:
+        type: integer
+      realname:
+        type: string
+      username:
+        type: string
+    type: object
+  types.UserCreateResp:
+    properties:
+      lastId:
+        type: integer
+    type: object
+  types.UserResp:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      gender:
+        type: integer
+      id:
+        type: integer
+      realname:
+        type: string
+      username:
+        type: string
+    type: object
+  types.UserSearchReq:
+    properties:
+      query:
+        description: pagination.Page
+        items:
+          $ref: '#/definitions/condition.QueryCondition'
+        type: array
+    type: object
+  types.UserUpdateReq:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      gender:
+        type: integer
+      id:
+        type: integer
+      realname:
+        type: string
+      username:
+        type: string
+    type: object
+  types.UsersInGroupReq:
+    properties:
+      groupId:
+        type: integer
+      userIds:
+        items:
+          type: integer
+        type: array
+    required:
+    - groupId
+    - userIds
+    type: object
+  types.UsersResp:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Swagger API
+  version: "1.0"
+paths:
+  /group/{groupId}:
+    get:
+      parameters:
+      - description: groupId
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.GroupResp'
+      summary: GroupInfo
+      tags:
+      - Group
+  /group/{groupId}/delete:
+    get:
+      parameters:
+      - description: groupId
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: GroupInfo
+      tags:
+      - Group
+  /group/{groupId}/update:
+    post:
+      parameters:
+      - description: groupId
+        in: path
+        name: groupId
+        required: true
+        type: integer
+      - description: GroupUpdateReq
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.GroupUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: GroupInfo
+      tags:
+      - Group
+  /group/create:
+    post:
+      parameters:
+      - description: GroupCreateReq
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.GroupCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.GroupCreateResp'
+      summary: GroupInfo
+      tags:
+      - Group
+  /group/list:
+    get:
+      parameters:
+      - in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - default: 1
+        in: query
+        name: pageNum
+        type: integer
+      - default: 10
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.GroupResp'
+            type: array
+      summary: GroupInfo
+      tags:
+      - Group
+  /group/search:
+    post:
+      parameters:
+      - description: GroupSearchReq
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.GroupSearchReq'
+      responses:
+        "200":
+          description: OK
+      summary: GroupInfo
+      tags:
+      - Group
+  /group/usersAdd:
+    post:
+      parameters:
+      - description: UsersInGroupReq
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UsersInGroupReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: UsersAddToGroup
+      tags:
+      - user2group
+  /group/usersDelete:
+    post:
+      parameters:
+      - description: UsersInGroupReq
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UsersInGroupReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: UsersDeleteFromGroup
+      tags:
+      - user2group
+  /group/usersList:
+    get:
+      parameters:
+      - description: groupId
+        in: query
+        name: groupId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.UsersResp'
+      summary: UsersListByGroup
+      tags:
+      - user2group
+  /user/{userId}:
+    get:
+      parameters:
+      - description: userId
+        in: path
+        name: userId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.UserResp'
+      summary: Fetch UserInfo profile
+      tags:
+      - User
+  /user/{userId}/delete:
+    get:
+      parameters:
+      - description: userId
+        in: path
+        name: userId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: user delete
+      tags:
+      - User
+  /user/{userId}/update:
+    post:
+      parameters:
+      - description: userId
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: UserUpdate Param
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: userInfo update
+      tags:
+      - User
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserCreate Param
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.UserCreateResp'
+      summary: Create User
+      tags:
+      - User
+  /user/groupsAdd:
+    post:
+      parameters:
+      - description: GroupsInUserReq
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.GroupsInUserReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: GroupsAddToUser
+      tags:
+      - user2group
+  /user/groupsDelete:
+    post:
+      parameters:
+      - description: GroupsInUserReq
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.GroupsInUserReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.ModifyRowsResp'
+      summary: GroupsDeleteFromUser
+      tags:
+      - user2group
+  /user/groupsList:
+    get:
+      parameters:
+      - description: userId
+        in: query
+        name: userId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.GroupsResp'
+      summary: GroupsListByUser
+      tags:
+      - user2group
+  /user/list:
+    get:
+      parameters:
+      - in: query
+        name: age
+        type: integer
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: gender
+        type: integer
+      - in: query
+        name: id
+        type: integer
+      - default: 1
+        in: query
+        name: pageNum
+        type: integer
+      - default: 10
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: realname
+        type: string
+      - in: query
+        name: username
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.UserResp'
+            type: array
+      summary: user list
+      tags:
+      - User
+  /user/search:
+    post:
+      parameters:
+      - description: UserSearch Param
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserSearchReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.UserResp'
+      summary: user search
+      tags:
+      - User
+swagger: "2.0"

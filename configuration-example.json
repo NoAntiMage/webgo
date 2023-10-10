@@ -1,0 +1,13 @@
+{
+	"log": {
+		"Output": "file",
+		"Level": "debug",
+		"Path": "./log/"
+	},
+	"db": {
+		"DriverName": "sqlite3",
+		"DataSourceName": "./sqlite.Db",
+		"MaxIdleConn": 20,
+		"MaxOpenConn": 10
+	}
+}

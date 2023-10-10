@@ -1,0 +1,9 @@
+*.db
+goweb
+*.test
+*.out
+*.log
+./log/*
+.DS_Store
+.vscode
+
